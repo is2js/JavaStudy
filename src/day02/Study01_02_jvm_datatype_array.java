@@ -1,3 +1,4 @@
+package day02;
 
 public class Study01_02_jvm_datatype_array {
 
