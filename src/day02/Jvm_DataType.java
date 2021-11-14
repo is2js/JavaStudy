@@ -1,6 +1,6 @@
 package day02;
 
-public class Study01_02_jvm_datatype_array {
+public class Jvm_DataType {
 
 	public static void main(String[] args) {
 		
@@ -57,7 +57,7 @@ public class Study01_02_jvm_datatype_array {
 		
 		
 		// 4. 변수선언과 초기화
-		// static 메서드 ex> main 안에서는, 외부 변수 중 static 달린 변수만 사용가능하다.
+		// static 메서드 ex> main 안에서는, 외부 변수 중 static 달린 변수만 사용가능하다. -> static 메모리 1순위 -> class 변수들 / main 메소드 등...은.. static이 붙은 것들만 호출가능하다.
 		
 		//변수종류 3가지
 		// 멤버변수1 : static 붙은 클래스 변수(= 모든 인스턴스 공유변수)
