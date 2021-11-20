@@ -92,6 +92,86 @@ public class 예외처리 {
 //
 	//->예외가 발생하면 ‘try → catch → finally’순으로 실행되고, 예외가 발생하지 않은 경우에는 ‘try → finally’
 	
+	//7. 자동 자원 반환 - try-with-resources문: finally에 입출력.close()를 넣어줬는데, 예외발생가능이라서 또 내부에 try /catch가 발생 -> finally 예외발생시 try 속 close()가 씹힘되는 문제점
+	//->  **괄호 안에 객체를 생성하는 문장을 넣으면, 이 객체는 따로 close()를 호출하지 않아도 try블럭을 벗어나는 순간 자동적으로 close()가 호출된다. 이 후 catch블럭 또는 finally블럭이 수행**
+//	try (FileInputStream fis = new FileInputStream("score.dat");
+//	         DataInputStream dis = new DataInputStream(fis)) {
+//	        while(true) {
+//	            score = dis.readInt();
+//	              ...
+//	        }   
+//	    } catch (EOFException e) {
+//	        System.out.println(" ... ");
+//	    } catch (IOException ie) {
+//	        ie.printStackTrace();
+//	    }
+	
+	//8. Exception과 Error의 차이는?  자바에서는 실행 시(runtime) 발생할 수 있는 프로그램 오류를 에러(Error)와 예외(Exception), 두 가지로 구분한다.
+	//1) 에러 Error : 메모리 부족(OutOfMemoryError)이나 스택오버플로우(StackOverflowError)와 같은 발생하게 되면 복구할 수 없는 심각한 수준의 오류를 뜻한다. 
+	//     시스템에 비정상적인 상황이 생겼을 때 발생하므로 System level의 문제이다.
+	//2) 예외 Exception: 	예외는 개발자가 작성한 로직 내에서 발생한 오류를 뜻한다. 따라서 발생하더라도 개발자가 이에 대한 적절한 코드를 미리 작성해 놓음으로써 프로그램의 비정상적인 종료와 같은 오류를 방지할 수 있다.
+	//     에러(error) 프로그램 코드에 의해서 수습될 수 없는 심각한 오류. 예외(exception) 프로그램 코드에 의해서 수습될 수 있는 상대적으로 미약한 오류
+	
+	
+	//9. RuntimeException과 RE가 아닌 것의 차이는?
+	//1) Exception클래스와 그 자손들 -> RE아닌 것. checked Exception
+//		: 외부의 영향으로 발생하는 것들로, 프로그램 사용자들의 동작에 의해서 발생하는 경우가 많다.
+//		존재하지 않는 파일의 이름을 입력했다던가(FileNotFoundException)
+//		실수로 클래스의 이름을 잘못 적었다던가(ClassNotFoundException)
+//		입력한 데이터 형식이 잘못된(DataFormatException)
+	//2) RuntimeException클래스와 그 자손들 -> RE. Unchecked Exception
+//		: 주로 프로그래머의 실수에 의해서 발생될 수 있는 예외들로 자바의 프로그래밍 요소들과 관계가 깊다.
+//		배열의 범위를 벗어난다던가(ArrayIndexOutOfBoundsException)
+//		값이 null인 참조변수의 멤버를 호출하려 했다던가(NullPointerException)
+//		클래스 간의 형변환을 잘못했다던가(ClassCastException)
+//		정수를 0으로 나누려고(ArithmeticException)
+//      ->	명시적인 처리를 강제하지 않고, 실행되는 시점(Runtime)에 확인
+//		-> Checked Exception이 발생할 가능성이 있는 메소드라면 반드시 try ~ catch로 감싸거나 throw로 던져서 처리해야 한다.
+//		-> 반면에 Unchecked Exception은 명시적인 예외처리를 하지 않아도 된다. 대부분의 예외가 부주의로 발생하고, 예측하지 못했던 상황의 예외가 아니기 때문에 굳이 로직으로 처리 할 필요가 없도록 만들어져 있다.
+
+
+	//10. 기본적으로 제공하는 RuntimeException들
+//	Arithmetic exception
+//	산술 연산에서 예외 조건이 발생했을 때 발생합니다.
+//	ArrayIndexOutOfBounds Exception
+//	잘못된 인덱스로 Array에 액세스했을 때 발생합니다. 인덱스가 음수이거나 배열 크기보다 크거나 같을 때 입니다.
+//	ClassNotFoundException
+//	정의한 클래스를 찾을 수 없을 때 발생하는 예외입니다.
+//	FileNotFoundException
+//	이 예외는 파일에 액세스할 수 없거나 열리지 않을 때 발생합니다
+//	IOException
+//	입출력 작업이 실패하거나 중단될 때 발생합니다
+//	InterruptedException
+//	Thread가 waiting, sleeping 또는 어떤 처리를 하고 있을 때 interrupt가 되면 발생하는 예외입니다.
+//	NoSuchMethodException
+//	찾을 수 없는 메서드에 액세스할 때 이 예외가 발생합니다
+//	NullPointerException
+//	이 예외는 null 객체의 멤버를 참조할 때 발생합니다.
+//	NumberFormatException
+//	메서드가 문자열을 숫자 형식으로 변환할 수 없는 경우 이 예외가 발생합니다
+//	StringIndexOutOfBoundsException
+//	문자열에 엑세스 하는 인덱스가 문자열보다 큰 경우거나 음수일 때 발생하는 예외입니다
+	
+	//11. 예외처리 전략
+	
+	//1) 예외 복구 :정상 상태로 돌려놓는 방법으로 어떤 예외로 발생하였을 때 다른 작업 흐름으로 자연스럽게 유도해주는 것이다. 가장 대표적으로 try-catch-finally
+	//-> (예외 처리되어 다른 작업 흐름으로 이어짐)
+	
+	//2) 예외처리 회피: 자신이 직접 예외처리하지 않고 호출하는 메소드로 전파시키는 방법이다.
+	//-> throws 문으로 예외를 회피하는 방법과 catch 블럭으로 일단 예외를 잡은 후에 로그를 남기고 다시 throw 하는 방법
+	
+	//3) 예외 전환: 발생한 예외를 그대로 넘기지 않고 더 적절한 예외로 전환하여 던지는 특징
+	//-> 예외를 전환할 때는 기존 예외를 담아서 중첩 예외로 만드는 것이 좋다.
+//	
+//catch (SQLException e) {
+//    throw new DuplicateUserIdException(e);
+//}
+	
+
+
+
+	
+	
 	
 
 }
